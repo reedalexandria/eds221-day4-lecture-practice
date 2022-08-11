@@ -71,3 +71,20 @@ dog_menu(name = "Waffle")
 
 # could have put data = dog_choice above 
 ```
+
+### Functions meet for loops
+
+```{r}
+#data frame named df
+
+mean_over_columns <- function(df) {
+  for (i in seq_along(df)) {
+    col_mean <- mean(df[[i]], na.rm = TRUE)
+    col_name <- colnames(df[i])
+    print(paste("The mean value of", col_name, "is", col_mean))
+  }
+}
+
+mean_over_columns(df = mtcars)
+mean_over_columns(df = faithful)
+```

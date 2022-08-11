@@ -4,6 +4,10 @@ format: html
 editor: visual
 ---
 
+```{r}
+library(tidyverse)
+```
+
 ## Nested for loop examples:
 
 ```{r}
@@ -28,6 +32,23 @@ for (i in seq_along(odds)) {
 }
 ```
 
+Code warm-up
+
+```{r}
+# You run 2 miles, and these are your quarter mile splits (in minutes)
+
+quarter_splits <- c(1.0, 1.1, 1.2, 1.1, 1.4, 1.5, 1.6, 1.4)
+
+# Write a for loop that returns your total time for any two consecutive quarter miles
+
+for (i in seq_along(quarter_splits)) {
+  half_mile_time = quarter_splits[i] + quarter_splits[i + 1]
+  print(half_mile_time)
+}
+
+# could issue an empty vector if you want to store this for later
+```
+
 ## A function in R:
 
 ```{r}
@@ -36,4 +57,173 @@ exclaim_age <- function(age) {
 }
 
 exclaim_age(age=10)
+```
+
+## Nested Loop:
+
+```{r}
+apples <- c(1, 2, 3, 4)
+price <- c(7, 10, 25)
+
+fruit_out <- matrix(nrow = length(price), ncol = length(apples))
+
+for (i in seq_along(apples)) {
+  for (j in seq_along(price)) {
+    total_cost <- price[j] * apples[i]
+    fruit_out[j, i] <- total_cost
+  }
+}
+
+fruit_out
+
+# class example:
+
+clothing <- c("shirt","pants", "shoes")
+color <- c("purple", "red", "blue", "white")
+
+our_clothes <- matrix(nrow = length(color), ncol = length(clothing))
+
+for (i in seq_along(clothing)) {
+  for (j in seq_along(color)) {
+    clothing_details <- paste(color[j], clothing[i])
+    our_clothes[j,i] <- clothing_details
+  }
+}
+
+our_clothes
+```
+
+our own loop:
+
+```{r}
+number_drinks <- c(1, 2, 3, 4, 5)
+price <- c(14, 16, 20)
+
+drink_price <- matrix(nrow = length(price), ncol = length(number_drinks))
+
+for (i in seq_along(number_drinks)) {
+  for (j in seq_along(price)) {
+    drink_cost <- price[j] * number_drinks[i]
+    drink_price[j, i] <- drink_cost
+  }
+}
+
+drink_price
+```
+
+## Logistic Growth 
+
+Modeling a population over time and varying growth rate
+
+```{r}
+my_function <- function(orange, rainbows) {
+  (orange * rainbows / 2.4) ^ 2
+}
+
+# Shorcut: Mac: cmd + option + x
+# PC: Ctrl + Alt + x  
+```
+
+```{r}
+logistic_growth <- function(K, N0, r, time) {
+  K / (1 + ((K - N0) / N0) * exp(-r * time))
+}
+
+# Test:
+logistic_growth(K = 5000, N0 = 100, r = 0.07, time = 42)
+```
+
+```{r}
+time_vec <- seq(from = 0, to = 35, by = 0.1)
+
+pop_35 <- logistic_growth(N0 = 40, K = 8000, r = 0.5, time = time_vec)
+
+pop_time35_df <- data.frame(time_vec, pop_35)
+
+ggplot(data = pop_time35_df, aes(x = time_vec, y = pop_35)) +
+  geom_line(color = "blue") +
+  labs(x = "Time", 
+       y = "Population", 
+       title = "Logistic Growth Rate Over Time", 
+       caption = "pretty cool graph")
+```
+
+```{r}
+pop_35_vec <- vector(mode = "numeric", length = length(time_vec))
+
+for (i in seq_along(time_vec)) {
+  population <- logistic_growth(N0 = 100, K = 6000, r = 0.27, time = time_vec[i])
+  pop_35_vec[i] <- population
+}
+
+pop_35_vec
+```
+
+Now extend this to iterate over multiple growth rates.
+
+```{r}
+r_seq <- seq(from = 0.20, to = 0.4, by = 0.01)
+
+#write over a nested for loop
+```
+
+```{r}
+out_matrix <- matrix(nrow = length(time_vec), ncol = length(r_seq))
+
+for (i in seq_along(r_seq)) {
+  for (j in seq_along(time_vec)) {
+    pop <- logistic_growth(N0 = 100, K = 6000, r_seq[i], time_vec[j])
+    out_matrix[j, i] <- pop
+  }
+}
+
+### Not some wrangling
+
+logistic_df <- data.frame(out_matrix, time = time_vec)
+
+# update column names
+
+colnames(logistic_df) <- c(paste0("gr_", r_seq), "time")
+
+# Create a data.frame where each variable only has a singe column (variables = population, time, growth rate)
+
+logistic_df_long <- logistic_df |> 
+  pivot_longer(cols = -time, values_to = "population", names_to = "growth_rate")
+
+ggplot(data = logistic_df_long, aes(x = time, y = population)) +
+  geom_line(aes(color = growth_rate))
+```
+
+## A function with warnings and an error message
+
+Use `warning` to add a warning.
+
+Use `stop` to add an error.
+
+P=0.3\|rhoAv\^3
+
+rho: air density (kg/m^3^)
+
+A: rotor radius (m)
+
+v: wind velocity (m/s)
+
+```{r}
+calc_windpower <- function(rho, radius, windspeed) {
+
+  if (windspeed > 130) {
+    warning("Whoa, that's really dast. Are you sure?")
+}
+
+if (rho > 1.225) {
+  warning("That air density is suspicious")
+  
+}
+  if (radius < 0) {
+    stop("Rotor radius must be a positibe value (meters)")
+  }
+
+ 0.3*rho*pi(radius^2)*(windspeed^3)
+ 
+}
 ```
