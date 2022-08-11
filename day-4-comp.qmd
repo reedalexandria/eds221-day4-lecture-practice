@@ -1,0 +1,73 @@
+---
+title: "Functions"
+format: html
+editor: visual
+---
+
+```{r}
+library(tidyverse)
+```
+
+## Intro to functions
+
+Make a function to double the user input
+
+```{r}
+double_this <- function(my_value) {
+  print(2 * my_value)
+}
+
+double_this(my_value = 200)
+double_this(200)
+double_this(c(1, 2, 10, 100, 175))
+```
+
+Write a function that asks for a user's NAME and age and returns an exclamation, like "I'm NAME, and I am \[age\] years old."
+
+```{r}
+exclaim_age <- function(your_name, your_age) {
+  print(paste("My name is", your_name, "and I am", your_age, "years old!"))
+}
+
+exclaim_age(your_name = "Alex", your_age = 28)
+```
+
+### Function with a conditional statement
+
+```{r}
+
+convert_animal_age <- function(animal, human_age) {
+  if (animal == "dog") {
+    print(human_age * 7)
+  } else if (animal == "goat") {
+    print(human_age * 4.7)
+  } else{
+    print("Please enter dog or goat for animal.")
+  }
+}
+
+convert_animal_age(animal = "dog", human_age = 12)
+convert_animal_age(animal = "goat", human_age = 4.2)
+convert_animal_age(animal = "pika", human_age = 2)
+```
+
+Make a data frame:
+
+```{r}
+dog_choice <- tribble(
+  ~dog_name, ~food,
+  "Khora", "everything",
+  "Teddy", "salmon",
+  "Waffle", "pancakes",
+  "Banjo", "chicken"
+)
+
+dog_menu <- function(name) {
+  my_sub <- filter(dog_choice, dog_name == name)
+  print(paste("My name is", my_sub$dog_name, "and my favorite food is", my_sub$food))
+}
+
+dog_menu(name = "Waffle")
+
+# could have put data = dog_choice above 
+```

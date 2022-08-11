@@ -1,0 +1,39 @@
+---
+title: "Lecture Notes"
+format: html
+editor: visual
+---
+
+## Nested for loop examples:
+
+```{r}
+file_prefix <- c("temp", "ph", "salinity")
+file_suffix <- c(1, 2, 3, 4, 5)
+
+for (i in seq_along(file_prefix)) {
+  for (j in seq_along(file_suffix)) {
+    print(paste0(file_prefix[i], "_", file_suffix[j]))
+  }
+}
+```
+
+```{r}
+odds <- c(1, 3, 5)
+evens <- c(2, 4, 6, 8)
+
+for (i in seq_along(odds)) {
+  for (j in seq_along(evens)) {
+    print(odds[i] * evens[j])
+  }
+}
+```
+
+## A function in R:
+
+```{r}
+exclaim_age <- function(age) {
+  print(paste("I am", age, " years old!"))
+}
+
+exclaim_age(age=10)
+```
