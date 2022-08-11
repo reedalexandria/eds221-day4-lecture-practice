@@ -200,7 +200,7 @@ Use `warning` to add a warning.
 
 Use `stop` to add an error.
 
-P=0.3\|rhoAv\^3
+$$P=0.3|rhoAv^3$$
 
 rho: air density (kg/m^3^)
 
