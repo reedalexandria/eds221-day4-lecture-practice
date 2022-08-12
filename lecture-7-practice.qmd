@@ -111,7 +111,7 @@ for (i in seq_along(number_drinks)) {
 drink_price
 ```
 
-## Logistic Growth 
+## Logistic Growth
 
 Modeling a population over time and varying growth rate
 
